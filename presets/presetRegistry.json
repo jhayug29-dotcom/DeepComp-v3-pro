@@ -1,0 +1,169 @@
+{
+  "version": "3.0.0",
+  "animationEnhancements": [
+    {
+      "id": "animation-enhancement-001",
+      "name": "animation enhancement",
+      "displayName": "Animation Enhancement",
+      "type": "video",
+      "category": "animation-enhancement",
+      "previewVideo": "presets/other preset/animation enhancement.mp4",
+      "preset": "presets/other preset/animation enhancement.ffx"
+    }
+  ],
+  "iconPresets": [
+    {
+      "id": "icon-preset-001",
+      "name": "icon preset",
+      "displayName": "Icon Preset 01",
+      "type": "image",
+      "category": "icon-preset",
+      "previewImage": "presets/other preset/icon preset.png",
+      "preset": "presets/other preset/icon preset.ffx"
+    }
+  ],
+  "textEffects": [
+    {
+      "id": "devin-jatho-text",
+      "name": "devin jatho text effect",
+      "displayName": "VSL TEXT",
+      "type": "image",
+      "preset": "presets/text preset/devin jatho text effect.ffx",
+      "imagePreview": "presets/text preset/devin jatho text effect.jpg",
+      "category": "text-effect",
+      "imageLabel": "VSL TEXT"
+    },
+    {
+      "id": "clean-glow-text",
+      "name": "clean glow tect fx",
+      "displayName": "CLEAN GLOW",
+      "type": "image",
+      "preset": "presets/text preset/clean glow tect fx.ffx",
+      "imagePreview": "presets/text preset/clean glow tect fx.jpg",
+      "category": "text-effect",
+      "imageLabel": "CLEAN GLOW"
+    },
+    {
+      "id": "gradient-text-fx",
+      "name": "gradient Text Fx",
+      "displayName": "DEVIN JATHO",
+      "type": "image",
+      "preset": "presets/text preset/gradient Text Fx.ffx",
+      "imagePreview": "presets/text preset/gradient Text Fx.jpg",
+      "category": "text-effect",
+      "imageLabel": "DEVIN JATHO"
+    },
+    {
+      "id": "metallic-text",
+      "name": "metalic text",
+      "displayName": "METALIC TEXT",
+      "type": "image",
+      "preset": "presets/text preset/metalic text.ffx",
+      "imagePreview": "presets/text preset/metalic text.jpg",
+      "category": "text-effect",
+      "imageLabel": "METALIC TEXT"
+    },
+    {
+      "id": "vsl-text-fx",
+      "name": "vsl text Fx",
+      "displayName": "GRADIENT TEXT",
+      "type": "image",
+      "preset": "presets/text preset/vsl text Fx.ffx",
+      "imagePreview": "presets/text preset/vsl text Fx.jpg",
+      "category": "text-effect",
+      "imageLabel": "GRADIENT TEXT"
+    }
+  ],
+  "textAnimations": [
+    {
+      "id": "color-reveal",
+      "name": "Jump",
+      "displayName": "Jump",
+      "type": "video",
+      "preset": "presets/text animation/Text 01 Jump .ffx",
+      "videoPreview": "presets/text animation/Color Reveal.mp4",
+      "category": "text-animation"
+    },
+    {
+      "id": "text-01-jump",
+      "name": "Smooth Up",
+      "displayName": "Smooth Up",
+      "type": "video",
+      "preset": "presets/text animation/Text 11 Smooth Up .ffx",
+      "videoPreview": "presets/text animation/Text 01 Jump .mp4",
+      "category": "text-animation"
+    },
+    {
+      "id": "text-11-smooth-up",
+      "name": "Polished Down",
+      "displayName": "Polished Down",
+      "type": "video",
+      "preset": "presets/text animation/Text 15 Polished Down .ffx",
+      "videoPreview": "presets/text animation/Text 11 Smooth Up .mp4",
+      "category": "text-animation"
+    },
+    {
+      "id": "text-14-polished-up",
+      "name": "Bounce Down",
+      "displayName": "Bounce Down",
+      "type": "video",
+      "preset": "presets/text animation/TEXT BOUNCE DOWN.ffx",
+      "videoPreview": "presets/text animation/Text 14 Polished Up .mp4",
+      "category": "text-animation"
+    },
+    {
+      "id": "text-15-polished-down",
+      "name": "Bounce Up",
+      "displayName": "Bounce Up",
+      "type": "video",
+      "preset": "presets/text animation/TEXT BOUNCE UP.ffx",
+      "videoPreview": "presets/text animation/Text 15 Polished Down .mp4",
+      "category": "text-animation"
+    },
+    {
+      "id": "text-bounce-down",
+      "name": "Wobble",
+      "displayName": "Wobble",
+      "type": "video",
+      "preset": "presets/text animation/Text 07 Wobble .ffx",
+      "videoPreview": "presets/text animation/TEXT BOUNCE DOWN.mp4",
+      "category": "text-animation"
+    },
+    {
+      "id": "text-bounce-up",
+      "name": "Blur By Word",
+      "displayName": "Blur By Word",
+      "type": "video",
+      "preset": "presets/text animation/Blur By Word.ffx",
+      "videoPreview": "presets/text animation/TEXT BOUNCE UP.mp4",
+      "category": "text-animation"
+    },
+    {
+      "id": "text-07-wobble",
+      "name": "Polished Up",
+      "displayName": "Polished Up",
+      "type": "video",
+      "preset": "presets/text animation/Text 14 Polished Up .ffx",
+      "videoPreview": "presets/text animation/Text 07 Wobble .mp4",
+      "category": "text-animation"
+    },
+    {
+      "id": "blur-by-word",
+      "name": "Color Reveal",
+      "displayName": "Color Reveal",
+      "type": "video",
+      "preset": "presets/text animation/Color Reveal.ffx",
+      "videoPreview": "presets/text animation/Blur By Word.mp4",
+      "category": "text-animation"
+    },
+    {
+      "id": "word-ramp-blur",
+      "name": "word ramp up + blur (1)",
+      "displayName": "word ramp up + blur (1)",
+      "type": "video",
+      "preset": "presets/text animation/word ramp up + blur (1).ffx",
+      "videoPreview": "presets/text animation/word ramp up + blur (1).mp4",
+      "category": "text-animation"
+    }
+  ]
+}
