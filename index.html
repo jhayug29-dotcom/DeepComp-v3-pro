@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>DeepComp</title>
+    <link rel="stylesheet" href="css/deepcomp.css">
+</head>
+<body>
+    <div id="app-container">
+
+        <!-- ── Header ─────────────────────────────────────────────────────── -->
+        <header>
+            <div class="dc-brand">
+                <div class="dc-logo">D</div>
+                <div>
+                    <h1 class="brand-title">DeepComp <span class="dc-pro-badge">PRO</span></h1>
+                    <p class="dc-sub">After Effects Motion Companion</p>
+                </div>
+                <div class="dc-brand-meta">
+                    <div class="dc-health-pill healthy" id="dc-health-indicator" title="System Health: Healthy">
+                        <span class="health-dot"></span>
+                        <span class="health-text">Healthy</span>
+                    </div>
+                    <span class="dc-version-pill" id="dc-version-pill" title="Click to check for updates">v2.0.0</span>
+                </div>
+            </div>
+
+            <!-- Global Search -->
+            <div class="dc-global-search-bar">
+                <span class="search-icon">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                </span>
+                <input type="text" id="dc-global-search-input" placeholder="Search presets, animations, effects, tools…" autocomplete="off" spellcheck="false"/>
+            </div>
+
+            <!-- Navigation Rail -->
+            <nav class="tabs dc-rail" aria-label="DeepComp sections">
+                <div class="dc-rail-track"></div>
+                <button class="tab-btn active" data-tab="tab-main" title="Tools" aria-label="Tools">
+                    <span class="dc-tab-glyph" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M14.7 6.2l3.1-3.1 3.1 3.1-3.1 3.1M14.7 6.2L4.4 16.5a2 2 0 0 0 0 2.8l.3.3a2 2 0 0 0 2.8 0L17.8 9.3M5.8 14.9l3.3 3.3"/><path d="M18.8 14.5v5M16.3 17h5"/></svg>
+                    </span>
+                    <span class="dc-tab-label">Tools</span>
+                </button>
+                <button class="tab-btn" data-tab="tab-effects" title="Effects" aria-label="Effects">
+                    <span class="dc-tab-glyph" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M12 2.8l1.5 4.1L17.6 8.4l-4.1 1.5L12 14l-1.5-4.1-4.1-1.5 4.1-1.5L12 2.8z"/><path d="M18.2 13.2l.9 2.3 2.2.9-2.2.8-.9 2.4-.9-2.4-2.3-.8 2.3-.9.9-2.3z"/></svg>
+                    </span>
+                    <span class="dc-tab-label">Effects</span>
+                </button>
+                <button class="tab-btn" data-tab="tab-precomps" title="Library" aria-label="Library">
+                    <span class="dc-tab-glyph" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4H10l1.6 2H17.5A2.5 2.5 0 0 1 20 8.5v8A2.5 2.5 0 0 1 17.5 19h-11A2.5 2.5 0 0 1 4 16.5v-10z"/><path d="M8 9.5h8M8 13h6"/></svg>
+                    </span>
+                    <span class="dc-tab-label">Library</span>
+                </button>
+                <button class="tab-btn" data-tab="tab-sfx" title="SFX" aria-label="SFX">
+                    <span class="dc-tab-glyph" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M5 9v6h3.5l4.5 3.5v-13L8.5 9H5z"/><path d="M16 9.5a4 4 0 0 1 0 5M18 7a7.5 7.5 0 0 1 0 10"/></svg>
+                    </span>
+                    <span class="dc-tab-label">SFX</span>
+                </button>
+            </nav>
+
+            <div class="dc-compat-bar" id="dc-compat-bar" title="Click to re-run setup &amp; compatibility check">
+                <span class="dot"></span>
+                <span class="dc-compat-text">Checking your After Effects…</span>
+            </div>
+        </header>
+
+        <!-- ── Smart Health Warning Banner ─────────────────────────────────── -->
+        <div class="dc-health-banner" id="dc-health-banner">
+            <div class="dc-hb-info">
+                <div class="dc-hb-title" id="dc-hb-title">High Memory Usage</div>
+                <div class="dc-hb-desc" id="dc-hb-desc">After Effects memory usage is elevated.</div>
+            </div>
+            <div class="dc-hb-actions">
+                <button class="dc-hb-btn" onclick="HealthMonitor.clearCache()" title="Purge Cache"><span class="dc-symbol" aria-hidden="true">⌫</span><span>Purge Cache</span></button>
+                <button class="dc-hb-close" onclick="hideHealthBanner()">&times;</button>
+            </div>
+        </div>
+
+        <!-- ── Update banner ──────────────────────────────────────────────── -->
+        <div class="dc-update-banner" id="dc-update-banner">
+            <div class="dc-update-text">
+                <div class="dc-update-title" id="dc-update-title">Update available</div>
+                <div class="dc-update-note" id="dc-update-note">Installs in place — no reinstall needed.</div>
+            </div>
+            <button class="dc-update-btn" id="dc-update-btn" title="Install update"><span class="dc-symbol" aria-hidden="true">↓</span><span>Update</span></button>
+        </div>
+
+        <main id="content">
+
+            <!-- ══════════════════════════════════════════════════════════════
+                 TAB 1: PRESETS & ANIMATIONS (Visual Media Cards)
+                 Top-Level Order:
+                 1. ANIMATION ENHANCEMENT (Video)
+                 2. ICON PRESETS (Image)
+                 3. ZOOM IN / OUT
+                 4. TEXT EFFECTS (Image)
+                 5. TEXT ANIMATIONS (Video)
+            ══════════════════════════════════════════════════════════════ -->
+            <section id="tab-effects" class="tab-content">
+                <!-- Filter bar -->
+                <div class="effect-filter-bar">
+                    <button class="effect-filter-tab active" data-filter="all">All</button>
+                    <button class="effect-filter-tab" data-filter="enhance">Enhance</button>
+                    <button class="effect-filter-tab" data-filter="icon-preset">Icons</button>
+                    <button class="effect-filter-tab" data-filter="text-effect">Text FX</button>
+                    <button class="effect-filter-tab" data-filter="text-animation">Animations</button>
+                    <button class="effect-filter-tab" data-filter="favorites">★ Favs</button>
+                </div>
+
+                <div class="effect-search-wrap">
+                    <input type="text" id="effect-search-filter" class="effect-search-input" placeholder="Filter presets &amp; animations…" autocomplete="off"/>
+                </div>
+
+                <!-- 1. ENHANCE TOOLS -->
+                <div class="section-block enhance-tools-section" id="section-enhance-tools">
+                    <div class="col-head">
+                        <h3>Enhance Tools</h3>
+                        <span class="col-sub">Precision Controls</span>
+                    </div>
+                    <div class="section-highlight-line"></div>
+
+                    <!-- Rounded Corners -->
+                    <div class="enhance-tool-card">
+                        <div class="enhance-tool-head">
+                            <div>
+                                <div class="enhance-tool-title"><span class="dc-inline-glyph" aria-hidden="true">⌒</span>Rounded Corners</div>
+                                <div class="enhance-tool-desc">Adds AE Rounded Edges with a predictable radius → border mapping.</div>
+                            </div>
+                            <span class="enhance-tool-badge">0–100</span>
+                        </div>
+
+                        <div class="enhance-control-row">
+                            <div class="enhance-control-label">Radius</div>
+                            <input id="enhance-radius-range" class="enhance-range" type="range" min="0" max="100" step="1" value="10" aria-label="Corner radius">
+                            <input id="enhance-radius-number" class="enhance-number" type="number" min="0" max="100" step="1" value="10" aria-label="Corner radius value">
+                        </div>
+                        <div class="enhance-metric-row">
+                            <span>Mapped Border</span>
+                            <strong id="enhance-border-readout">40.00</strong>
+                        </div>
+                        <button class="action-btn full-btn dc-btn-primary enhance-apply-btn" id="enhance-rounded-btn" title="Apply Rounded Corners">
+                            <span class="btn-icon dc-symbol" aria-hidden="true">⌒</span><span>Apply</span>
+                        </button>
+                    </div>
+
+                    <!-- Bounce -->
+                    <div class="enhance-tool-card enhance-tool-card-bounce">
+                        <div class="enhance-tool-head">
+                            <div>
+                                <div class="enhance-tool-title"><span class="dc-inline-glyph dc-glyph-bounce" aria-hidden="true">↗</span>Bounce</div>
+                                <div class="enhance-tool-desc">Applies the overshoot expression to the selected animated property.
+                                </div>
+                            </div>
+                            <span class="enhance-tool-badge"><span class="dc-inline-glyph" aria-hidden="true">∿</span> EXPR</span>
+                        </div>
+
+                        <div class="enhance-params-grid">
+                            <div class="enhance-param">
+                                <label for="bounce-amplitude-range">Amplitude</label>
+                                <div class="enhance-param-inline">
+                                    <input id="bounce-amplitude-range" class="enhance-range" type="range" min="0" max="2000" step="10" value="250">
+                                    <input id="bounce-amplitude-number" class="enhance-number" type="number" min="0" max="2000" step="10" value="250">
+                                </div>
+                            </div>
+                            <div class="enhance-param">
+                                <label for="bounce-frequency-range">Frequency</label>
+                                <div class="enhance-param-inline">
+                                    <input id="bounce-frequency-range" class="enhance-range" type="range" min="0.1" max="20" step="0.1" value="3">
+                                    <input id="bounce-frequency-number" class="enhance-number" type="number" min="0.1" max="20" step="0.1" value="3">
+                                </div>
+                            </div>
+                            <div class="enhance-param">
+                                <label for="bounce-decay-range">Decay</label>
+                                <div class="enhance-param-inline">
+                                    <input id="bounce-decay-range" class="enhance-range" type="range" min="0.1" max="20" step="0.1" value="5">
+                                    <input id="bounce-decay-number" class="enhance-number" type="number" min="0.1" max="20" step="0.1" value="5">
+                                </div>
+                            </div>
+                        </div>
+
+                        <label class="enhance-check-row">
+                            <input id="bounce-floor" type="checkbox">
+                            <span>Floor</span>
+                            <small>Prevents the overshoot from going negative.</small>
+                        </label>
+                        <button class="action-btn full-btn dc-btn-primary enhance-apply-btn" id="enhance-bounce-btn" title="Apply Bounce">
+                            <span class="btn-icon dc-symbol" aria-hidden="true">↗</span><span>Apply Bounce</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. ANIMATION ENHANCEMENT (Video Previews Only) -->
+                <div class="section-block effect-section-stacked" id="section-anim-enhancement">
+                    <div class="col-head">
+                        <h3>Animation Enhancement</h3>
+                        <span class="col-sub">Video Motion Presets</span>
+                    </div>
+                    <div class="section-highlight-line"></div>
+                    <div id="animation-enhancement-grid" class="media-library-grid"></div>
+                </div>
+
+                <!-- 2. ICON PRESETS (Image Previews Only) -->
+                <div class="section-block effect-section-stacked" id="section-icon-presets" style="margin-top:14px;">
+                    <div class="col-head">
+                        <h3>Icon Presets</h3>
+                        <span class="col-sub">Visual Image Presets</span>
+                    </div>
+                    <div class="section-highlight-line"></div>
+                    <div id="icon-presets-grid" class="media-library-grid"></div>
+                </div>
+
+                <!-- 3. ZOOM IN / OUT (Positioned Above Text FX & Text Animations) -->
+                <div class="section-block" id="section-quick-zooms" style="margin-top:14px;">
+                    <div class="col-head">
+                        <h3>Zoom In / Out</h3>
+                        <span class="col-sub">Camera &amp; Scale Presets</span>
+                    </div>
+                    <div class="section-highlight-line"></div>
+                    <div class="button-row">
+                        <button class="action-btn preset-btn special-btn" onclick="evalScript('applySmoothZoomIn()')">
+                            <svg class="btn-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                            <span>Smooth Zoom In</span>
+                        </button>
+                        <button class="action-btn preset-btn special-btn" onclick="evalScript('applySmoothZoomOut()')">
+                            <svg class="btn-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                            <span>Smooth Zoom Out</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 4. TEXT EFFECTS (Image Previews, Devin Jatho Text) -->
+                <div class="section-block effect-section-stacked" id="section-text-effects" style="margin-top:14px;">
+                    <div class="col-head">
+                        <h3>Text Effects</h3>
+                        <span class="col-sub">Enhanced Style Presets</span>
+                    </div>
+                    <div class="section-highlight-line"></div>
+                    <div id="text-effects-visual-grid" class="media-library-grid"></div>
+                </div>
+
+                <!-- 5. TEXT ANIMATIONS (Square Video Cards in Exact 10-Item Order) -->
+                <div class="section-block effect-section-stacked" id="section-text-animations" style="margin-top:14px;">
+                    <div class="col-head">
+                        <h3>Text Animations</h3>
+                        <span class="col-sub">Square Video Previews</span>
+                    </div>
+                    <div class="section-highlight-line"></div>
+                    <div class="animation-library-scroll-wrap">
+                        <div id="text-anim-visual-grid" class="animation-library-grid"></div>
+                    </div>
+                </div>
+
+                <div class="notice-box">
+                    <span class="notice-icon">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                    </span>
+                    <span>Preset animations automatically align keyframes to selected layer In-Point.</span>
+                </div>
+            </section>
+
+            <!-- ══════════════════════════════════════════════════════════════
+                 TAB 2: SFX SOUND DESIGN LIBRARY
+            ══════════════════════════════════════════════════════════════ -->
+            <section id="tab-sfx" class="tab-content">
+                <div class="sfx-header-controls">
+                    <div class="sfx-search-bar">
+                        <span class="search-icon">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        </span>
+                        <input type="text" id="sfx-search-input" placeholder="Search SFX by name, tags, folder…" autocomplete="off" spellcheck="false"/>
+                    </div>
+                    <button class="action-btn dc-btn-primary sfx-top-add-btn" onclick="SFXLibrary.openAddSFXDialog()" title="Import Audio Files">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        <span>Add SFX</span>
+                    </button>
+                    <button class="action-btn sfx-top-folder-btn" onclick="SFXLibrary.openFolderDialog()" title="Import entire folder of audio files">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg>
+                        <span>Folder</span>
+                    </button>
+                    <button class="action-btn sfx-top-stack-btn" onclick="SFXLibrary.openSoundStackModal()" title="Sound Stack Builder">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                        <span>Stack</span>
+                    </button>
+                </div>
+
+                <!-- Import Progress Indicator -->
+                <div id="sfx-import-indicator" class="sfx-import-banner" style="display:none;">
+                    <span class="sfx-spinner"></span>
+                    <span class="sfx-import-text">IMPORTING... 01 / 24</span>
+                </div>
+
+                <!-- SFX Workspace: persistent folder sidebar + fast card canvas -->
+                <div class="sfx-workspace">
+                    <aside id="sfx-folder-list" class="sfx-folder-container" aria-label="SFX folders"></aside>
+                    <div class="sfx-content-pane">
+                        <div class="sfx-content-toolbar">
+                            <div class="sfx-current-folder"><span class="sfx-current-dot"></span><span id="sfx-current-folder-name">All SFX</span></div>
+                            <div class="sfx-content-hint">Double-click to preview · Enter to insert</div>
+                        </div>
+                        <div class="sfx-scroll-area">
+                            <div id="sfx-grid" class="sfx-card-grid"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bottom Audio Transport / Preview Bar -->
+                <div id="sfx-transport-bar" class="sfx-transport-bar" style="display:none;">
+                    <button class="sfx-tb-play-btn" onclick="SFXLibrary.togglePreview(SFXLibrary.currentPlayingId)">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    </button>
+                    <div class="sfx-tb-info">
+                        <div class="sfx-tb-title-row">
+                            <span class="sfx-tb-title">Sound Name</span>
+                            <span class="sfx-tb-time"><span class="sfx-tb-time-cur">00:00</span> / <span class="sfx-tb-time-total">00:00</span></span>
+                        </div>
+                        <div class="sfx-tb-progress-track">
+                            <div class="sfx-tb-progress"></div>
+                        </div>
+                    </div>
+                    <div class="sfx-tb-volume-wrap" title="Preview Volume">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+                        <input type="range" id="sfx-volume-slider" min="0" max="1" step="0.05" value="0.8" class="sfx-vol-slider"/>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ══════════════════════════════════════════════════════════════
+                 TAB 3: MAIN & EXTENDED AE TOOLS (Icons + Text)
+            ══════════════════════════════════════════════════════════════ -->
+            <section id="tab-main" class="tab-content active">
+
+                <div class="section-block">
+                    <h3>Add Layers</h3>
+                    <div class="section-highlight-line"></div>
+                    <div class="button-row grid-3">
+                        <button class="action-btn" onclick="evalScript('addSolid()')">
+                            <svg class="btn-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                            <span>Solid</span>
+                        </button>
+                        <button class="action-btn" onclick="evalScript('addAdjustmentLayer()')">
+                            <svg class="btn-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v18"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></svg>
+                            <span>Adj Layer</span>
+                        </button>
+                        <button class="action-btn" onclick="evalScript('addNull()')">
+                            <svg class="btn-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/></svg>
+                            <span>Null</span>
+                        </button>
+                        <button class="action-btn" onclick="evalScript('addCamera()')">
+                            <svg class="btn-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                            <span>Camera</span>
+                        </button>
+                        <button class="action-btn" onclick="evalScript('addText()')">
+                            <svg class="btn-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+                            <span>Text</span>
+                        </button>
+                        <button class="action-btn" onclick="evalScript('addShape()')">
+                            <svg class="btn-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 12 12 22 2 12 12 2"/></svg>
+                            <span>Shape</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="section-block">
+                    <h3>Layer Operations</h3>
+                    <div class="section-highlight-line"></div>
+                    <div class="button-row grid-3">
+                        <button class="action-btn" onclick="evalScript('duplicateLayer()')" title="Duplicate selected layer(s)">
+                            <svg class="btn-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                            <span>Duplicate</span>
+                        </button>
+                        <button class="action-btn" onclick="evalScript('trimInPoint()')" title="Trim In Point to playhead">
+                            <svg class="btn-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="4" x2="4" y2="20"/><polyline points="14 7 9 12 14 17"/><line x1="9" y1="12" x2="20" y2="12"/></svg>
+                            <span>Trim In</span>
+                        </button>
+                        <button class="action-btn" onclick="evalScript('trimOutPoint()')" title="Trim Out Point to playhead">
+                            <svg class="btn-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="20" y1="4" x2="20" y2="20"/><polyline points="10 7 15 12 10 17"/><line x1="4" y1="12" x2="15" y2="12"/></svg>
+                            <span>Trim Out</span>
+                        </button>
+                        <button class="action-btn" onclick="evalScript('splitLayers()')" title="Split layers at playhead">
+                            <svg class="btn-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>
+                            <span>Split</span>
+                        </button>
+                        <button class="action-btn" onclick="evalScript('fitToComp(\'all\')')" title="Fit layer to Comp size">
+                            <svg class="btn-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+                            <span>Fit Comp</span>
+                        </button>
+                        <button class="action-btn" onclick="evalScript('sequenceLayers(0)')" title="Sequence layers end-to-end">
+                            <svg class="btn-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="13" y2="6"/><line x1="8" y1="12" x2="18" y2="12"/><line x1="13" y1="18" x2="23" y2="18"/></svg>
+                            <span>Sequence</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="section-block">
+                    <h3>Properties &amp; Effects</h3>
+                    <div class="section-highlight-line"></div>
+                    <div class="button-row grid-3">
+                        <button class="action-btn" onclick="evalScript('copyProperties()', r => { if (r==='ok') showToast('✓ Properties copied', 'ok'); else showToast('Select layer first', 'err'); })">
+                            <svg class="btn-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                            <span>Copy Props</span>
+                        </button>
+                        <button class="action-btn" onclick="evalScript('pasteProperties()')">
+                            <svg class="btn-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg>
+                            <span>Paste Props</span>
+                        </button>
+                        <button class="action-btn" onclick="evalScript('removeAllEffects()')" title="Remove all effects from selected layers">
+                            <svg class="btn-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+                            <span>Clear FX</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="section-block">
+                    <h3>Anchor Point</h3>
+                    <div class="section-highlight-line"></div>
+                    <div class="anchor-grid">
+                        <button class="anchor-btn" onclick="evalScript('setAnchor(0, 0)')">↖</button>
+                        <button class="anchor-btn" onclick="evalScript('setAnchor(0.5, 0)')">↑</button>
+                        <button class="anchor-btn" onclick="evalScript('setAnchor(1, 0)')">↗</button>
+                        <button class="anchor-btn" onclick="evalScript('setAnchor(0, 0.5)')">←</button>
+                        <button class="anchor-btn" onclick="evalScript('setAnchor(0.5, 0.5)')">●</button>
+                        <button class="anchor-btn" onclick="evalScript('setAnchor(1, 0.5)')">→</button>
+                        <button class="anchor-btn" onclick="evalScript('setAnchor(0, 1)')">↙</button>
+                        <button class="anchor-btn" onclick="evalScript('setAnchor(0.5, 1)')">↓</button>
+                        <button class="anchor-btn" onclick="evalScript('setAnchor(1, 1)')">↘</button>
+                    </div>
+                </div>
+
+                <div class="section-block">
+                    <h3>Align</h3>
+                    <div class="section-highlight-line"></div>
+                    <div class="button-row align-row">
+                        <button class="action-btn align-btn" onclick="evalScript('alignLayer(\'left\')')" title="Align Left">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 1V13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><rect x="4.5" y="3" width="7.5" height="2.5" rx="0.5" fill="currentColor"/><rect x="4.5" y="8.5" width="5" height="2.5" rx="0.5" fill="currentColor"/></svg>
+                        </button>
+                        <button class="action-btn align-btn" onclick="evalScript('alignLayer(\'center_horiz\')')" title="Align Center H">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1V13" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 1.5"/><rect x="3.5" y="3" width="7" height="2.5" rx="0.5" fill="currentColor"/><rect x="4.5" y="8.5" width="5" height="2.5" rx="0.5" fill="currentColor"/></svg>
+                        </button>
+                        <button class="action-btn align-btn" onclick="evalScript('alignLayer(\'right\')')" title="Align Right">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M12 1V13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><rect x="2" y="3" width="7.5" height="2.5" rx="0.5" fill="currentColor"/><rect x="4.5" y="8.5" width="5" height="2.5" rx="0.5" fill="currentColor"/></svg>
+                        </button>
+                        <button class="action-btn align-btn" onclick="evalScript('alignLayer(\'top\')')" title="Align Top">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 2H13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><rect x="3" y="4.5" width="2.5" height="7.5" rx="0.5" fill="currentColor"/><rect x="8.5" y="4.5" width="2.5" height="5" rx="0.5" fill="currentColor"/></svg>
+                        </button>
+                        <button class="action-btn align-btn" onclick="evalScript('alignLayer(\'center_vert\')')" title="Align Center V">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7H13" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 1.5"/><rect x="3" y="3.5" width="2.5" height="7" rx="0.5" fill="currentColor"/><rect x="8.5" y="4.5" width="2.5" height="5" rx="0.5" fill="currentColor"/></svg>
+                        </button>
+                        <button class="action-btn align-btn" onclick="evalScript('alignLayer(\'bottom\')')" title="Align Bottom">
+                            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 12H13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><rect x="3" y="2" width="2.5" height="7.5" rx="0.5" fill="currentColor"/><rect x="8.5" y="4.5" width="2.5" height="5" rx="0.5" fill="currentColor"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="section-block">
+                    <h3>Comp Structure</h3>
+                    <div class="section-highlight-line"></div>
+                    <div class="button-row">
+                        <button class="action-btn large-btn" onclick="evalScript('precompose()')">
+                            <svg class="btn-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg>
+                            <span>Pre-Compose</span>
+                        </button>
+                        <button class="action-btn large-btn" onclick="evalScript('unprecomp()')">
+                            <svg class="btn-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/><line x1="9" y1="14" x2="15" y2="14"/></svg>
+                            <span>Un-Precomp</span>
+                        </button>
+                    </div>
+                    <button class="action-btn full-btn" onclick="evalScript('centerInComp()')" style="margin-top:6px;">
+                        <svg class="btn-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/></svg>
+                        <span>Center in Comp</span>
+                    </button>
+                </div>
+
+                <div class="section-block">
+                    <h3>Set Layer Colours</h3>
+                    <div class="section-highlight-line"></div>
+                    <div class="color-grid">
+                        <button class="color-btn" style="background:#E05666;" onclick="evalScript('setLabel(1)')"  title="Red"></button>
+                        <button class="color-btn" style="background:#F5A623;" onclick="evalScript('setLabel(2)')"  title="Yellow"></button>
+                        <button class="color-btn" style="background:#50E3C2;" onclick="evalScript('setLabel(9)')"  title="Green"></button>
+                        <button class="color-btn" style="background:#4A90E2;" onclick="evalScript('setLabel(14)')" title="Cyan"></button>
+                        <button class="color-btn" style="background:#4A6FA5;" onclick="evalScript('setLabel(8)')"  title="Blue"></button>
+                        <button class="color-btn" style="background:#9013FE;" onclick="evalScript('setLabel(10)')" title="Purple"></button>
+                        <button class="color-btn" style="background:#D0021B;" onclick="evalScript('setLabel(4)')"  title="Pink"></button>
+                        <button class="color-btn" style="background:#6B7280;" onclick="evalScript('setLabel(0)')"  title="None"></button>
+                    </div>
+                </div>
+
+                <div class="section-block">
+                    <h3>Project Tools</h3>
+                    <div class="section-highlight-line"></div>
+                    <div class="button-row">
+                        <button class="action-btn large-btn" onclick="evalScript('organiseProject()')">
+                            <svg class="btn-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                            <span>Organise Project</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ── MOST USED EFFECTS ───────────────────────────────── -->
+                <div class="section-block">
+                    <h3>Most Used Effects</h3>
+                    <div class="section-highlight-line"></div>
+
+                    <div class="horizontal-scroll" id="custom-effects-list">
+                        <button class="effect-chip add-effect-btn"
+                                onclick="openAddEffectModal()"
+                                title="Search &amp; add an effect to this list">+</button>
+                    </div>
+
+                    <div class="most-used-actions">
+                        <button class="action-btn mu-btn" onclick="openAEEffectsPanel()">
+                            <svg class="btn-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                            <span>Open AE Effects</span>
+                        </button>
+                        <button class="action-btn mu-btn mu-capture-btn" onclick="captureLastEffect()">
+                            <svg class="btn-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 17v5"/><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z"/></svg>
+                            <span>Capture Last</span>
+                        </button>
+                    </div>
+                </div>
+
+            </section><!-- /tab-main -->
+
+            <!-- ══════════════════════════════════════════════════════════════
+                 TAB 3: LIBRARY (Saved Precomps with Live Thumbnails)
+            ══════════════════════════════════════════════════════════════ -->
+            <section id="tab-precomps" class="tab-content">
+                <div class="section-block">
+                    <div class="col-head">
+                        <h3>Saved Precomps</h3>
+                        <span class="col-sub">Modular AE Assets</span>
+                    </div>
+                    <div class="section-highlight-line"></div>
+                    <p class="desc">Save selected precomp with an automatic visual thumbnail and insert it into any project.</p>
+                    <button class="action-btn full-btn dc-btn-primary" onclick="savePrecompAndRefresh()" data-dc-save-precomp="1" style="margin-top:6px;margin-bottom:12px;">
+                        <svg class="btn-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                        <span data-dc-save-label>Save Selected Precomp</span>
+                    </button>
+                    <div class="library-scroll-container">
+                        <div id="saved-precomps-list" class="visual-grid"></div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <footer>
+            <div class="button-row" style="margin-bottom:8px;">
+                <button class="action-btn" onclick="dcStepBy(-1)">‹ Back</button>
+                <button class="action-btn dc-btn-primary" onclick="dcStepBy(1)">Next ›</button>
+            </div>
+            <div class="brand-footer">DeepComp Pro • yugz.fx</div>
+        </footer>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         SYSTEM HEALTH MODAL
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <div id="dc-health-modal" class="add-effect-overlay">
+        <div class="add-effect-dialog" style="max-width:320px;">
+            <div class="add-effect-header">
+                <div class="add-effect-title">
+                    <span class="add-effect-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                    </span>
+                    <span>AE &amp; System Health</span>
+                </div>
+                <button class="add-effect-close" onclick="closeHealthModal()">&times;</button>
+            </div>
+            <div class="health-modal-body">
+                <div class="health-row">
+                    <span class="health-label">After Effects:</span>
+                    <span id="dc-hm-ae-status" class="health-val">Running</span>
+                </div>
+                <div class="health-row">
+                    <span class="health-label">System RAM:</span>
+                    <span id="dc-hm-ram-val" class="health-val">0%</span>
+                </div>
+                <div class="health-meter-wrap">
+                    <div class="health-meter-bar" id="dc-hm-ram-bar" style="width:0%;"></div>
+                </div>
+                <div class="health-row" style="margin-top:6px;">
+                    <span class="health-label">Status:</span>
+                    <span id="dc-hm-ram-status" class="health-tag tag-ok">Normal</span>
+                </div>
+                <div class="health-row">
+                    <span class="health-label">Panel Bridge:</span>
+                    <span id="dc-hm-panel-status" class="health-val">Healthy</span>
+                </div>
+                <button class="action-btn full-btn" id="dc-purge-cache-btn" style="margin-top:14px;">
+                    🧹 Purge All AE Caches
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         GLOBAL SEARCH OVERLAY
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <div id="dc-search-overlay" class="dc-search-overlay">
+        <div class="dc-search-card">
+            <div class="dc-search-card-header">
+                <span>Search DeepComp</span>
+                <button class="dc-search-card-close" onclick="SearchFavorites.closeSearchOverlay()">&times;</button>
+            </div>
+            <div id="dc-search-results" class="dc-search-results"></div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         ADD-EFFECT MODAL
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <div id="add-effect-modal" class="add-effect-overlay">
+        <div class="add-effect-dialog">
+            <div class="add-effect-header">
+                <div class="add-effect-title">
+                    <span class="add-effect-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    </span>
+                    <span>Add Effect to Most Used</span>
+                </div>
+                <button class="add-effect-close" onclick="closeAddEffectModal()">&times;</button>
+            </div>
+            <div class="add-effect-search-wrap">
+                <input id="modal-search-input" class="add-effect-search" type="text" placeholder="Search effects, plugins, presets installed in your AE…" autocomplete="off" spellcheck="false"/>
+            </div>
+            <div class="add-effect-hint">Only effects &amp; presets installed in your After Effects appear here.</div>
+            <div id="modal-results-list" class="add-effect-results"></div>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         AUTO SETUP WIZARD
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <div id="dc-wizard" class="dc-wizard">
+        <div class="dc-wizard-head">
+            <div class="dc-wizard-logo"></div>
+            <h2 class="dc-wizard-title">Setting up DeepComp Pro</h2>
+            <p class="dc-wizard-desc">Verifying your After Effects environment and configuring presets and tools.</p>
+        </div>
+        <div class="dc-progress"><div class="dc-progress-bar" id="dc-progress-bar"></div></div>
+        <div class="dc-checklist" id="dc-checklist"></div>
+        <div class="dc-wizard-foot">
+            <button class="action-btn dc-btn-ghost" id="dc-wizard-skip">Skip</button>
+            <button class="action-btn dc-btn-primary" id="dc-wizard-finish" disabled>Start using DeepComp</button>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         WELCOME MODAL
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <div id="dc-welcome" class="dc-welcome">
+        <div class="dc-welcome-logo">D</div>
+        <p class="dc-welcome-eyebrow" id="dc-welcome-eyebrow">Welcome to DeepComp Pro v2.0</p>
+        <h2 class="dc-welcome-title" id="dc-welcome-title">Your complete AE motion<br>&amp; workflow companion</h2>
+        <p class="dc-welcome-desc" id="dc-welcome-desc">Video motion previews, visual presets, keyframe adaptation, precomp library, and professional workflow tools.</p>
+        <div class="dc-welcome-foot">
+            <button class="action-btn full-btn dc-btn-primary" id="dc-welcome-start">Set up DeepComp</button>
+            <button class="dc-welcome-skip" id="dc-welcome-skip">Skip and open the panel</button>
+        </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════════════════
+         SFX MODALS: TRIM & INSERT, SOUND STACK, RECONNECT
+    ═══════════════════════════════════════════════════════════════════ -->
+    <!-- Trim & Insert Modal -->
+    <div class="add-effect-overlay" id="sfx-trim-modal">
+        <div class="add-effect-dialog" style="max-width:340px;">
+            <div class="add-effect-header">
+                <div class="add-effect-title">
+                    <span class="add-effect-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>
+                    </span>
+                    <span class="sfx-trim-title">Trim &amp; Insert</span>
+                </div>
+                <button class="add-effect-close" id="sfx-trim-close">&times;</button>
+            </div>
+            <div style="padding:10px 12px 14px;">
+                <canvas id="sfx-trim-canvas" class="sfx-trim-canvas-area" style="width:100%;height:70px;background:var(--bg-deep);border-radius:var(--r-sm);border:1px solid var(--line);display:block;margin-bottom:8px;"></canvas>
+                <div class="sfx-trim-readouts">
+                    <div><span class="readout-label">START:</span> <span id="sfx-trim-start" class="readout-val">00:00</span></div>
+                    <div><span class="readout-label">END:</span> <span id="sfx-trim-end" class="readout-val">00:00</span></div>
+                    <div><span class="readout-label">DURATION:</span> <span id="sfx-trim-dur" class="readout-val">00:00</span></div>
+                </div>
+                <div class="button-row" style="margin-top:10px;">
+                    <button class="action-btn" id="sfx-trim-preview-btn">▶ Preview</button>
+                    <button class="action-btn dc-btn-primary" id="sfx-trim-confirm-btn">Insert</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sound Stack Modal -->
+    <div class="add-effect-overlay" id="sfx-stack-modal">
+        <div class="add-effect-dialog" style="max-width:340px;">
+            <div class="add-effect-header">
+                <div class="add-effect-title">
+                    <span class="add-effect-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                    </span>
+                    <span>Sound Stack Builder</span>
+                </div>
+                <button class="add-effect-close" id="sfx-stack-close">&times;</button>
+            </div>
+            <div style="padding:10px 12px 14px;">
+                <p class="desc">Layer multiple selected sounds around current time with offsets:</p>
+                <div id="sfx-stack-items-list" class="sfx-stack-list-wrap"></div>
+                <button class="action-btn full-btn dc-btn-primary" id="sfx-stack-insert-btn" style="margin-top:10px;">Insert Sound Stack</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reconnect File Modal -->
+    <div class="add-effect-overlay" id="sfx-reconnect-modal">
+        <div class="add-effect-dialog" style="max-width:320px;">
+            <div class="add-effect-header">
+                <div class="add-effect-title">
+                    <span class="add-effect-icon">⚠️</span>
+                    <span>Reconnect SFX File</span>
+                </div>
+                <button class="add-effect-close" id="sfx-reconnect-close">&times;</button>
+            </div>
+            <div style="padding:10px 12px 14px;">
+                <p id="sfx-reconnect-msg" class="desc" style="white-space:pre-wrap; word-break:break-all;"></p>
+                <div class="button-row" style="margin-top:12px;">
+                    <button class="action-btn dc-btn-primary" id="sfx-reconnect-single-btn">Locate File</button>
+                    <button class="action-btn" id="sfx-reconnect-bulk-btn">Reconnect Folder</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/version.js"></script>
+    <script src="js/CSInterface.js"></script>
+    <script src="js/compat.js"></script>
+    <script src="js/welcome.js"></script>
+    <script src="js/healthMonitor.js"></script>
+    <script src="js/searchFavorites.js"></script>
+    <script src="js/textEffects.js"></script>
+    <script src="js/sfxLibrary.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/updater.js"></script>
+    <div id="deepcomp-toast" class="deepcomp-toast"></div>
+</body>
+</html>

@@ -1,0 +1,42 @@
+DeepComp v6.3 — 100-Stage Audit
+
+Result: PASS
+
+Core checks:
+- Package structure: PASS
+- JavaScript syntax: PASS
+- Registry JSON: PASS
+- Manifest XML: PASS
+- Text animation count/order: PASS (10/10)
+- Text animation display labels: PASS (10/10)
+- Text animation preset pairing: PASS (10/10)
+- Fourth preview filename spacing/mapping: PASS
+- Text-effect image labels: PASS (5/5, OCR verified)
+- SFX imported-folder root: PASS
+- SFX nested folder hierarchy: PASS
+- Browser folder fallback hierarchy: PASS
+- Fake/default SFX folders: disabled
+- Large SFX import uses lightweight records + deferred waveform hydration: PASS
+- Chunked SFX card rendering: PASS
+- Video lazy visibility playback: PASS
+- Preset apply path wiring: PASS
+- AE manifest/host wiring: PASS
+
+Note: Actual After Effects UI/runtime click-testing requires running the extension inside the user's installed AE/CEP environment. Static and functional-source simulations passed.
+Save Pre-comp / Enhance hardening audit (2026-09-01):
+- Timeline pre-comp detection: PASS
+- Fresh asynchronous selection validation before save modal: PASS
+- Library path parity between CEP and ExtendScript: PASS
+- Existing pre-comp names never silently overwritten: PASS
+- Save transaction snapshot + project-path restoration: PASS (static)
+- Reduced-project AEP integrity check: PASS (static)
+- Exact first-frame selection uses CompItem.displayStartTime when available: PASS
+- PNG render fallback uses a local PNG output-module template + RenderQueue.render(): PASS (static)
+- Recursive imported-composition discovery: PASS
+- Bounce target limited to numeric expression-capable properties: PASS
+- Rounded radius mapping checks (0→0, 10→40, +1→+10): PASS
+- Apple-style glyph wiring retained: PASS
+- JavaScript syntax checks: PASS
+- ExtendScript source syntax parse check: PASS (Node lexical parse; AE runtime still required)
+
+Runtime note: The package cannot be executed inside Adobe After Effects in this environment. Final click/render/import verification must be performed in the target AE installation.

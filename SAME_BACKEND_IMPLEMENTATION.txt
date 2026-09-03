@@ -1,0 +1,5 @@
+DeepComp Save Precomp was implemented by transplanting the uploaded PrecompLibrary backend into the DeepComp host layer.
+
+UI: existing DeepComp Save Precomp modal/library UI retained.
+Backend: PC engine from uploaded PrecompLibrary-AE-Panel, adapted only for DeepComp's existing user library path and named-save input.
+Selection, first-frame thumbnail, reduce/save, footage collection/relink, metadata, and import algorithm remain the same engine.

@@ -1,0 +1,62 @@
+DeepComp V3 — Intelligent Hardening Audit
+Date: 2026-09-01
+
+Purpose
+Reduce Save Pre-comp, Library, Enhance and Bounce failure modes by using strict selection identity, transactional project handling, deterministic validation and defensive import logic.
+
+Save Pre-comp
+- Fresh timeline validation immediately before save.
+- Exactly one selected timeline layer is required.
+- Selected layer must have a valid CompItem source.
+- Unique internal composition token is used only while snapshot identity is established.
+- Composition signature (width, height, frame rate, duration, layer count) is verified before commit.
+- Temporary marker is removed from the user's live project and from the restoration snapshot.
+- Destructive reduceProject operation occurs only inside the temporary snapshot.
+- Save operation is protected by a re-entry lock to prevent double-click/concurrent saves.
+- AEP file existence and minimum size are checked before commit.
+- First-frame thumbnail must be a valid PNG before the asset is committed.
+- Incomplete transactions remove their newly-created library folder.
+- Restore path closes the temporary/reduced project before reopening the correct restore target.
+- Unsaved source projects are restored from their clean temporary snapshot without silently discarding edits.
+
+Thumbnail
+- Source composition, not parent composition, is rendered.
+- First visual frame is derived from displayStartTime when supported.
+- saveFrameToPng is preferred.
+- Render Queue fallback uses a PNG output-module template.
+- PNG signature is validated before Library commit.
+
+Library
+- Canonical library root comes from the AE host.
+- Thumbnails are read as base64 data URLs for CEP-safe display.
+- Assets with failed external-footage copies are marked as non-portable.
+- Missing previews are surfaced instead of silently pretending a preview exists.
+
+Import
+- Saved AEP is imported into the active project.
+- Composition discovery is recursive.
+- Metadata signature is used to prevent a same-name wrong-comp import.
+- Verification failure cancels import rather than inserting an ambiguous composition.
+- Failed imports clean up the imported root when possible.
+- Imported composition is added as a native pre-comp layer at the active playhead.
+- Imported layer is selected after insertion.
+
+Enhance
+- Rounded Corners radius is clamped to 0–100.
+- Border mapping is deterministic: Border = max(0, 40 + (Radius - 10) * 10).
+- Native AE controls are created so settings remain editable after application.
+- Bounce targets only numeric expression-capable properties.
+- Exactly one explicitly selected compatible property is preferred.
+- Transform fallback logic uses Position as the deterministic default.
+- Bounce controls remain native Expression Controls on the layer.
+
+Verification
+- main.js syntax: PASS
+- hostscript.jsx lexical parse (Node copy-as-.js): PASS
+- manifest XML: PASS
+- preset registry JSON: PASS
+- duplicate host function scan: PASS
+- ZIP integrity: PASS
+
+Runtime limitation
+Adobe After Effects itself is not available in this execution environment, so real AE UI/render/import clicks cannot be executed here. Runtime claims are therefore limited to source-level and package-level validation.

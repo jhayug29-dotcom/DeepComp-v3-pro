@@ -1,0 +1,32 @@
+DeepComp V3 — Save Pre-comp Hotfix Audit (2026-09-01)
+
+Purpose
+Resolve incorrect pre-comp capture, missing Library thumbnails, and path/selection reliability problems.
+
+Fixes
+- Freshly validates exactly one selected timeline layer and requires that its source is a CompItem.
+- Captures source-comp identity, dimensions, frame rate, duration, layer count, item id, and project item index before project switching.
+- Renders the thumbnail from the selected SOURCE COMP before reduction, using saveFrameToPng when available.
+- Render-queue fallback renders into an isolated temporary folder and copies the actual generated PNG frame to thumbnail.png.
+- Removed the previous invalid RenderQueueItem.render usage.
+- Performs project reduction only inside a temporary snapshot project, never against the user's working project state.
+- Uses item id, then project index + metadata, then structural metadata as defensive comp-identification fallbacks.
+- Preserves unsaved user changes by restoring the snapshot when the original project was dirty.
+- Does not delete an in-use restoration snapshot.
+- Library UI gets its canonical path from ExtendScript, eliminating CEP/AE path drift.
+- Library thumbnails are loaded as base64 data URLs, eliminating CEP file:// security/path issues.
+- Broken library folders are marked incomplete and cannot be imported.
+- Import prefers a direct comp with the metadata's source-comp name before searching nested folders.
+- Existing placeholders are no longer inserted before the save transaction completes.
+- Save/import result handling now reports selection changes and incomplete assets explicitly.
+
+Static verification
+- main.js Node syntax: PASS
+- hostscript.jsx lexical parse: PASS
+- manifest XML parse: PASS
+- presetRegistry.json parse: PASS
+- duplicate function-name scan: PASS
+- required Save Pre-comp functions present: PASS
+
+Runtime limitation
+Adobe After Effects itself is not installed/runnable in this execution environment, so real UI/render/import clicks cannot be executed here. The hotfix is therefore source-validated but not falsely labeled as AE-runtime tested.
